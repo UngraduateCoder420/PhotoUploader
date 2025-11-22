@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manoj</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-6">
+  <h1 class="text-center text-3xl font-bold mb-6">Photo Gallery With Captions</h1>
+
+  <!-- Image Gallery -->
+  <div id="gallery"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+    <!-- Images + captions will appear here -->
+  </div>
+
+  <!-- Upload Box -->
+  <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow">
+    <label class="block text-lg font-semibold mb-2">Upload Photos</label>
+
+    <input 
+      type="file" 
+      id="photoInput" 
+      accept="image/*" 
+      multiple
+      class="w-full p-3 border border-gray-300 rounded-lg cursor-pointer mb-4"
+    />
+
+    <label class="block text-lg font-semibold mb-2">Enter Caption (optional)</label>
+    <input 
+      type="text" 
+      id="captionInput"
+      placeholder="Type a caption for these photos..."
+      class="w-full p-3 border border-gray-300 rounded-lg mb-4"
+    />
+
+    <button 
+      id="uploadBtn"
+      class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">
+      Upload Photos
+    </button>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const photoInput = document.getElementById("photoInput");
+    const captionInput = document.getElementById("captionInput");
+    const gallery = document.getElementById("gallery");
+    const uploadBtn = document.getElementById("uploadBtn");
+
+    uploadBtn.addEventListener("click", () => {
+      const files = Array.from(photoInput.files);
+      const captionText = captionInput.value.trim();
+
+      if (!files.length) {
+        alert("Please select at least one photo!");
+        return;
+      }
+
+      files.forEach(file => {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          // Create a card for image + caption
+          const card = document.createElement("div");
+          card.className = "bg-white p-3 rounded-lg shadow-md";
+
+          card.innerHTML = `
+            <img src="${e.target.result}" class="w-full h-48 object-cover rounded-lg" />
+            <p class="mt-2 text-center text-gray-700 font-medium">
+              ${captionText || "No caption"}
+            </p>
+          `;
+
+          gallery.appendChild(card);
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+      // Clear inputs after upload
+      photoInput.value = "";
+      captionInput.value = "";
+    });
+  </script>
+
+</body>
+</html>
